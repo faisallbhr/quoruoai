@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { RootState } from "@/store";
 import { login } from "@/store/userSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -17,6 +16,7 @@ const loginSchema = z.object({
   password: z.string().nonempty({ message: "Password is required" }),
 });
 
+type LoginData = z.infer<typeof loginSchema>;
 const Login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -32,11 +32,11 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<z.infer<typeof loginSchema>>({
+  } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
+  const onSubmit = async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     dispatch(login());
     router.push("/");
@@ -45,7 +45,9 @@ const Login = () => {
   return (
     <div className="min-h-dvh flex items-center justify-center">
       <div className="max-w-xl w-full rounded-md p-8">
-        <h1 className="font-bold text-3xl text-center">Let's Authenticate!</h1>
+        <h1 className="font-bold text-3xl text-center">
+          Let&apos;s Authenticate!
+        </h1>
         <h3 className="text-sm pt-2 pb-8 text-center">
           Start your session by providing valid credentials
         </h3>
